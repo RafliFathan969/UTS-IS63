@@ -3,17 +3,17 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Kategori;
+use Illuminate\Support\Facades\DB;
 
 class KategoriSeeder extends Seeder
 {
     public function run(): void
     {
-        Kategori::insert([
-            ['nama_kategori' => 'Novel'],
-            ['nama_kategori' => 'Komik'],
-            ['nama_kategori' => 'Pendidikan'],
-            ['nama_kategori' => 'Teknologi'],
+        DB::table('kategoris')->insert([
+            ['nama_kategori' => 'Novel', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_kategori' => 'Komik', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_kategori' => 'Pendidikan', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_kategori' => 'Teknologi', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

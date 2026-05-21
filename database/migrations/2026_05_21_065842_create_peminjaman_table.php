@@ -8,11 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('peminjaman', function (Blueprint $table) {
+        Schema::create('peminjamans', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('buku_id')
-                ->constrained('buku')
+                ->constrained('bukus')
                 ->onDelete('cascade');
 
             $table->string('nama_peminjam');

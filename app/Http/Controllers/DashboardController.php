@@ -14,10 +14,9 @@ class DashboardController extends Controller
         $buku = Buku::count();
         $peminjaman = Peminjaman::count();
 
-        return view('dashboard', compact(
-            'kategori',
-            'buku',
-            'peminjaman'
-        ));
+        // Ambil data list peminjaman beserta buku dan kategorinya
+        $listPeminjaman = Peminjaman::with('buku.kategori')->get();
+
+        return view('dashboard', compact('kategori', 'buku', 'peminjaman', 'listPeminjaman'));
     }
 }

@@ -7,6 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Buku extends Model
 {
-    /** @use HasFactory<\Database\Factories\BukuFactory> */
     use HasFactory;
+
+    protected $table = 'bukus';
+
+    protected $fillable = [
+        'kategori_id',
+        'judul',
+        'penulis',
+        'penerbit',
+        'stok'
+    ];
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
+
+    public function peminjaman()
+    {
+        return $this->hasMany(Peminjaman::class);
+    }
 }

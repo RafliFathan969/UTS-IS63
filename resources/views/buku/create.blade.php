@@ -7,9 +7,7 @@
 </h1>
 
 <form action="/buku" method="POST">
-
     @csrf
-
     <div class="mb-3">
         <label>Kategori</label>
 
