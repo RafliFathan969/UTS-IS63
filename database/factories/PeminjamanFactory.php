@@ -2,23 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Peminjaman;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Buku;
 
-/**
- * @extends Factory<Peminjaman>
- */
 class PeminjamanFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'buku_id' => Buku::inRandomOrder()->first()->id ?? 1,
+            'nama_peminjam' => $this->faker->name(),
+            'tanggal_pinjam' => now(),
+            'tanggal_kembali' => now()->addDays(7),
         ];
     }
 }

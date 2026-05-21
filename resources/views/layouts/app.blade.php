@@ -14,13 +14,13 @@
 
     <div id="wrapper">
 
-        @include('layout.sidebar')
+        @include('partials.sidebar')
 
         <div id="content-wrapper" class="d-flex flex-column">
 
             <div id="content">
 
-                @include('layout.navbar')
+                @include('partials.navbar')
 
                 <div class="container-fluid">
                     @yield('content')
@@ -28,7 +28,7 @@
 
             </div>
 
-            @include('layout.footer')
+            @include('partials.footer')
 
         </div>
     </div>

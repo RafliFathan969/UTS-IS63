@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $buku = Buku::count();
         $peminjaman = Peminjaman::count();
 
-        return view('dashboard.index', compact(
+        return view('dashboard', compact(
             'kategori',
             'buku',
             'peminjaman'

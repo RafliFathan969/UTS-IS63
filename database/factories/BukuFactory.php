@@ -2,23 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Buku;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Kategori;
 
-/**
- * @extends Factory<Buku>
- */
 class BukuFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'kategori_id' => Kategori::inRandomOrder()->first()->id ?? 1,
+            'judul' => $this->faker->sentence(3),
+            'penulis' => $this->faker->name(),
+            'stok' => $this->faker->numberBetween(1, 20),
         ];
     }
 }
