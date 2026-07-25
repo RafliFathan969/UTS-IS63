@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Peminjaman extends Model
 {
@@ -14,11 +15,18 @@ class Peminjaman extends Model
     protected $fillable = [
         'buku_id',
         'nama_peminjam',
+        'jumlah',
         'tanggal_pinjam',
-        'tanggal_kembali'
+        'tanggal_kembali',
+        'status',
     ];
 
-    public function buku()
+    protected $casts = [
+        'tanggal_pinjam' => 'date',
+        'tanggal_kembali' => 'date',
+    ];
+
+    public function buku(): BelongsTo
     {
         return $this->belongsTo(Buku::class);
     }

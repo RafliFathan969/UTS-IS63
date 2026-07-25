@@ -2,21 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kategori;
 use App\Models\Buku;
+use App\Models\Kategori;
 use App\Models\Peminjaman;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        $kategori = Kategori::count();
-        $buku = Buku::count();
-        $peminjaman = Peminjaman::count();
+        $totalBuku = Buku::count();
+        $totalKategori = Kategori::count();
+        $totalStok = Buku::sum('stok');
+        $totalDipinjam = Peminjaman::where('status', 'dipinjam')->count();
+        $totalTerlambat = Peminjaman::where('status', 'terlambat')->count();
 
-        // Ambil data list peminjaman beserta buku dan kategorinya
-        $listPeminjaman = Peminjaman::with('buku.kategori')->get();
+        $peminjamanTerbaru = Peminjaman::with('buku')
+            ->latest()
+            ->take(5)
+            ->get();
 
-        return view('dashboard', compact('kategori', 'buku', 'peminjaman', 'listPeminjaman'));
+        return view('dashboard', compact(
+            'totalBuku',
+            'totalKategori',
+            'totalStok',
+            'totalDipinjam',
+            'totalTerlambat',
+            'peminjamanTerbaru'
+        ));
     }
 }

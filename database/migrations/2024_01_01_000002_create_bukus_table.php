@@ -10,22 +10,20 @@ return new class extends Migration
     {
         Schema::create('bukus', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('kategori_id')
                 ->constrained('kategoris')
-                ->onDelete('cascade');
-
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
             $table->string('judul');
             $table->string('penulis');
             $table->string('penerbit');
-            $table->integer('stok');
-
+            $table->integer('stok')->default(0);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('buku');
+        Schema::dropIfExists('bukus');
     }
 };
