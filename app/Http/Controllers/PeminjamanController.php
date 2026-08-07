@@ -26,6 +26,21 @@ class PeminjamanController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $this->updateStatusTerlambat();
+
+        $peminjamans = Peminjaman::with('buku')
+            ->when(request('search'), function ($query, $search) {
+                $query->where('nama_peminjam', 'like', "%{$search}%");
+            })
+            ->when(request('status'), function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('peminjamans.index', compact('peminjamans'));
+
         return view('peminjamans.index', compact('peminjamans'));
     }
 
@@ -48,7 +63,7 @@ class PeminjamanController extends Controller
 
             if ($buku->stok < $request->jumlah) {
                 throw ValidationException::withMessages([
-                    'jumlah' => 'Stok buku tidak mencukupi. Sisa stok: '.$buku->stok,
+                    'jumlah' => 'Stok buku tidak mencukupi. Sisa stok: ' . $buku->stok,
                 ]);
             }
 
@@ -64,6 +79,10 @@ class PeminjamanController extends Controller
 
     public function show(Peminjaman $peminjaman): View
     {
+        $peminjaman->load('buku.kategori');
+
+        $this->updateStatusTerlambat();
+        $peminjaman->refresh(); // reload data terbaru setelah kemungkinan status berubah
         $peminjaman->load('buku.kategori');
 
         return view('peminjamans.show', compact('peminjaman'));
@@ -90,11 +109,11 @@ class PeminjamanController extends Controller
             $sudahDikembalikanSebelumnya = $statusSebelumnya === 'dikembalikan';
             $sekarangDikembalikan = $peminjaman->status === 'dikembalikan';
 
-            if (! $sudahDikembalikanSebelumnya && $sekarangDikembalikan) {
+            if (!$sudahDikembalikanSebelumnya && $sekarangDikembalikan) {
                 $peminjaman->buku->increment('stok', $peminjaman->jumlah);
             }
 
-            if ($sudahDikembalikanSebelumnya && ! $sekarangDikembalikan) {
+            if ($sudahDikembalikanSebelumnya && !$sekarangDikembalikan) {
                 $peminjaman->buku->decrement('stok', $peminjaman->jumlah);
             }
         });
@@ -117,5 +136,16 @@ class PeminjamanController extends Controller
         return redirect()
             ->route('peminjamans.index')
             ->with('success', 'Peminjaman berhasil dihapus.');
+    }
+    /**
+     * Update status peminjaman menjadi "terlambat" jika tanggal_kembali
+     * sudah lewat dan buku belum dikembalikan.
+     */
+    private function updateStatusTerlambat(): void
+    {
+        Peminjaman::where('tanggal_kembali', '<', now())
+            ->where('status', '!=', 'dikembalikan')
+            ->where('status', '!=', 'terlambat')
+            ->update(['status' => 'terlambat']);
     }
 }

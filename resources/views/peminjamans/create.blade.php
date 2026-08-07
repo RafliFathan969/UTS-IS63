@@ -61,7 +61,7 @@
                     <select name="status" class="form-control @error('status') is-invalid @enderror">
                         <option value="dipinjam" {{ old('status') == 'dipinjam' ? 'selected' : '' }}>Dipinjam</option>
                         <option value="dikembalikan" {{ old('status') == 'dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
-                        <option value="terlambat" {{ old('status') == 'terlambat' ? 'selected' : '' }}>Terlambat</option>
+                        {{-- <option value="terlambat" {{ old('status') == 'terlambat' ? 'selected' : '' }}>Terlambat</option> --}}
                     </select>
                     @error('status')
                         <span class="invalid-feedback d-block">{{ $message }}</span>
