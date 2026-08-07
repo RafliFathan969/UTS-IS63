@@ -19,6 +19,7 @@ class UpdateBukuRequest extends FormRequest
             'penulis' => ['required', 'string', 'max:255'],
             'penerbit' => ['required', 'string', 'max:255'],
             'stok' => ['required', 'integer', 'min:0'],
+            'gambar' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
         ];
     }
 
@@ -32,6 +33,7 @@ class UpdateBukuRequest extends FormRequest
             'penerbit.required' => 'Nama penerbit wajib diisi.',
             'stok.required' => 'Stok wajib diisi.',
             'stok.min' => 'Stok tidak boleh kurang dari 0.',
+            'gambar.mimes' => 'Format gambar tidak valid. Hanya JPG, JPEG, dan PNG yang diperbolehkan.',
         ];
     }
 }

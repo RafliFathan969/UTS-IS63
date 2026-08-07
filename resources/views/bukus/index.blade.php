@@ -59,7 +59,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="{{ route('bukus.destroy', $buku) }}" method="POST" class="d-inline"
-                                          onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
+                                        onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">

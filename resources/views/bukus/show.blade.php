@@ -46,6 +46,28 @@
                     <td>{{ $buku->updated_at->format('d-m-Y H:i') }}</td>
                 </tr>
             </table>
+            {{-- ===== KOLOM KIRI: PROFIL ===== --}}
+                <div class="col-xl-4 col-lg-5">
+
+                    {{-- Kartu Foto & Nama --}}
+                    <div class="card shadow mb-4">
+                        <div class="card-body text-center py-4">
+                            @if ($buku->gambar)
+                                <img src="{{ Storage::url($buku->gambar) }}" class="rounded-circle mb-3"
+                                    style="width:120px;height:120px;object-fit:cover;">
+                            @else
+                                <div class="rounded-circle bg-gradient-primary d-inline-flex
+                                align-items-center justify-content-center mb-3"
+                                    style="width:120px;height:120px;">
+                                    <span class="text-white" style="font-size:3rem;font-weight:700;">
+                                        {{ strtoupper(substr($buku->judul, 0, 1)) }}
+                                    </span>
+                                </div>
+                            @endif
+                            <h5 class="font-weight-bold mb-1">{{ $buku->judul }}</h5>
+                            <p class="text-muted mb-2"><code>{{ $buku->isbn }}</code></p>
+                        </div>
+                    </div>
 
             <a href="{{ route('bukus.edit', $buku) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit

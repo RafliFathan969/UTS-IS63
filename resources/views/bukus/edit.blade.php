@@ -7,14 +7,15 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
-            <form method="POST" action="{{ route('bukus.update', $buku) }}">
+            <form method="POST" action="{{ route('bukus.update', $buku) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
                     <label>Kategori</label>
                     <select name="kategori_id" class="form-control @error('kategori_id') is-invalid @enderror">
                         @foreach ($kategoris as $kategori)
-                            <option value="{{ $kategori->id }}" {{ old('kategori_id', $buku->kategori_id) == $kategori->id ? 'selected' : '' }}>
+                            <option value="{{ $kategori->id }}"
+                                {{ old('kategori_id', $buku->kategori_id) == $kategori->id ? 'selected' : '' }}>
                                 {{ $kategori->nama_kategori }}
                             </option>
                         @endforeach
@@ -26,7 +27,8 @@
 
                 <div class="form-group">
                     <label>Judul</label>
-                    <input type="text" name="judul" value="{{ old('judul', $buku->judul) }}" class="form-control @error('judul') is-invalid @enderror">
+                    <input type="text" name="judul" value="{{ old('judul', $buku->judul) }}"
+                        class="form-control @error('judul') is-invalid @enderror">
                     @error('judul')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
@@ -34,7 +36,8 @@
 
                 <div class="form-group">
                     <label>Penulis</label>
-                    <input type="text" name="penulis" value="{{ old('penulis', $buku->penulis) }}" class="form-control @error('penulis') is-invalid @enderror">
+                    <input type="text" name="penulis" value="{{ old('penulis', $buku->penulis) }}"
+                        class="form-control @error('penulis') is-invalid @enderror">
                     @error('penulis')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
@@ -42,7 +45,8 @@
 
                 <div class="form-group">
                     <label>Penerbit</label>
-                    <input type="text" name="penerbit" value="{{ old('penerbit', $buku->penerbit) }}" class="form-control @error('penerbit') is-invalid @enderror">
+                    <input type="text" name="penerbit" value="{{ old('penerbit', $buku->penerbit) }}"
+                        class="form-control @error('penerbit') is-invalid @enderror">
                     @error('penerbit')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
@@ -50,12 +54,35 @@
 
                 <div class="form-group">
                     <label>Stok</label>
-                    <input type="number" min="0" name="stok" value="{{ old('stok', $buku->stok) }}" class="form-control @error('stok') is-invalid @enderror">
+                    <input type="number" min="0" name="stok" value="{{ old('stok', $buku->stok) }}"
+                        class="form-control @error('stok') is-invalid @enderror">
                     @error('stok')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
                 </div>
 
+                {{-- Kolom Kanan: Foto --}}
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Foto Buku</label>
+                        <div class="text-center mb-3">
+                            <img id="preview-gambar"
+                                src="{{ $buku->gambar
+                                    ? Storage::url($buku->gambar)
+                                    : asset('vendor/startbootstrap-sb-admin-2/img/undraw_profile.svg') }}"
+                                class="img-thumbnail rounded" width="150" height="150" style="object-fit:cover">
+                        </div>
+                        <input type="file" name="gambar" id="gambar"
+                            class="form-control-file {{ $errors->has('gambar') ? 'is-invalid' : '' }}"
+                            accept="image/jpg,image/jpeg,image/png" onchange="previewGambar(this)">
+                        <small class="form-text text-muted">
+                            Kosongkan jika tidak ingin mengganti foto.
+                        </small>
+                        @error('gambar')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary">Perbarui</button>
                 <a href="{{ route('bukus.index') }}" class="btn btn-secondary">Batal</a>
             </form>

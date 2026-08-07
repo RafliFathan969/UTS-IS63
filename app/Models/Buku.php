@@ -17,6 +17,7 @@ class Buku extends Model
         'penulis',
         'penerbit',
         'stok',
+        'gambar',
     ];
 
     public function kategori(): BelongsTo

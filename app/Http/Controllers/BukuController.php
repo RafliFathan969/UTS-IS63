@@ -8,6 +8,7 @@ use App\Models\Buku;
 use App\Models\Kategori;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
@@ -39,7 +40,14 @@ class BukuController extends Controller
 
     public function store(StoreBukuRequest $request): RedirectResponse
     {
-        Buku::create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')
+                ->store('gambar-buku', 'public');
+        }
+
+        Buku::create($data);
 
         return redirect()
             ->route('bukus.index')
@@ -63,6 +71,19 @@ class BukuController extends Controller
     public function update(UpdateBukuRequest $request, Buku $buku): RedirectResponse
     {
         $buku->update($request->validated());
+
+        if ($request->hasFile('gambar')) {
+            // hapus gambar lama biar tidak numpuk file sampah
+            if ($buku->gambar) {
+                Storage::disk('public')->delete($buku->gambar);
+            }
+
+            $data['gambar'] = $request->file('gambar')->store('buku', 'public');
+        }else {
+            $data = $request->validated();
+        }
+
+        $buku->update($data);
 
         return redirect()
             ->route('bukus.index')
