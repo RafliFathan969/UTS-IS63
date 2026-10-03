@@ -15,5 +15,8 @@ class UserSeeder extends Seeder
             'email' => 'admin@perpustakaan.com',
             'password' => Hash::make('password'),
         ]);
+
+        $this->command->info('UserSeeder: Akun admin berhasil dibuat.');
+        $this->command->info('Login: admin@perpustakaan.com | password');
     }
 }
